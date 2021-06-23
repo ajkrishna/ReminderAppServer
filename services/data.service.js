@@ -57,7 +57,7 @@ const reg=(uid,uname,pswd)=>
           })
         }
        
-       const saveve=(req,edate,edesc)=>
+       const saveve=(req,i,edate,edesc)=>
        {
            let uid=req.session.currentUser;
         return db.Event.findOne({uid})
@@ -65,7 +65,7 @@ const reg=(uid,uname,pswd)=>
             //console.log(user);
             if(user){
             user.events.push({
-                evedate:edate,evedesc:edesc
+                event_id:i,evedate:edate,evedesc:edesc
               })
             user.save();
             return{ 
