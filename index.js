@@ -73,6 +73,13 @@ app.post('/display', (req,res)=>{
       // res.status(200).send("success");
        })
 });
+app.post('/deleve',(req,res)=>{
+    dataService.deleve(req.body.uid,req.body.edate,req.body.edesc)
+    .then(result=>{
+        res.status(result.statusCode).json(result)
+      // res.status(200).send("success");
+       })
+});
 //PUT-UPDATE/MODIFY WHOLE
 app.put('/',(req,res)=>{
     res.send("THIS IS A PUT METHOD");
@@ -85,6 +92,7 @@ app.patch('/',(req,res)=>{
 app.delete('/',(req,res)=>{
     res.send("THIS IS A DELETE METHOD");
 });
+
 app.listen(3000,()=>{
     console.log("Server started at port 3000");
 })
