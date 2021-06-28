@@ -57,7 +57,7 @@ const reg=(uid,uname,pswd)=>
           })
         }
        
-       const saveve=(req,i,edate,edesc)=>
+       const saveve=(req,edate,edesc)=>
        {
            let uid=req.session.currentUser;
         return db.Event.findOne({uid})
@@ -65,7 +65,7 @@ const reg=(uid,uname,pswd)=>
             //console.log(user);
             if(user){
             user.events.push({
-                event_id:i,evedate:edate,evedesc:edesc
+                evedate:edate,evedesc:edesc
               })
             user.save();
             return{ 
@@ -88,24 +88,23 @@ const reg=(uid,uname,pswd)=>
    var uid=parseInt(uID);
         return db.Event.findOne({uid})
         .then(user=>{
-          console.log(user);
+         // console.log(user);
           if(user)
           {
           let len=user.events.length;
           let edate=[];
           let edesc=[];
-          let e_id=[];
+          
           for(let i=0;i<len;i++)
           {
             edate.push(user.events[i].evedate);
             edesc.push(user.events[i].evedesc);
-            e_id.push(user.events[i].event_id);
+            
           }
         
           return{ 
             statusCode:200,
             status:true,
-            event_id:e_id,
             event_date:edate,
             event_desc:edesc
           } 
@@ -137,10 +136,37 @@ const reg=(uid,uname,pswd)=>
     })
   }
 
+  const editeve=(uID,editdate,editdesc,edate,edesc)=>{
+    var uid=parseInt(uID);
+   
+   return db.Event.updateOne({uid:uid,"events.evedate": edate, "events.evedesc": edesc},
+   {$set: {"events.$.evedate": editdate, "events.$.evedesc": editdesc}})
+   .then(user=>{
+      if(user)
+          { 
+          return{ 
+            statusCode:200,
+            status:true,
+            event_date:editdate,
+            event_desc:editdesc,
+            message:"Updated Successfully"
+          } 
+          }
+         else
+           {
+                 return {statusCode:422,
+                  status:false,
+                message:"Try Again..."
+              }}
+       
+    })
+  }
+
        module.exports={
         reg,
         login,
         saveve,
         display,
-        deleve
+        deleve,
+        editeve
       }
